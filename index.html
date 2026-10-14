@@ -402,7 +402,8 @@
     render(calc(h,head));
   });
   $$('.action-btn').forEach(btn=>btn.addEventListener('click',()=>{$$('.action-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); $$('.panel-section').forEach(s=>s.classList.remove('active')); $('#'+btn.dataset.target).classList.add('active');}));
-  $('#shopLink').addEventListener('click',e=>{ if(!COUPANG_URL){e.preventDefault(); alert('아직 준비물 링크가 입력되지 않았습니다. 코드의 COUPANG_URL 값을 형님의 쿠팡 인플루언서 링크로 바꿔주세요.');} else { $('#shopLink').href=COUPANG_URL; }});
+  $('#shopLink').href = COUPANG_URL;
+  $('#shopLink').addEventListener('click',e=>{ if(!COUPANG_URL){e.preventDefault(); alert('아직 준비물 링크가 입력되지 않았습니다.');} });
   render(calc(parseFloat($('#height').value), null));
 })();
 </script>
