@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>몬스터볼 옷만들기 _sstt familly</title>
+  <style>
+    :root{--bg:#f6f7f9;--card:#fff;--ink:#111827;--muted:#6b7280;--line:#d1d5db;--red:#e53935;--redSoft:#fee2e2;--black:#111;--blue:#2563eb;--warn:#fff7ed;--warnLine:#fb923c;--shadow:0 10px 30px rgba(0,0,0,.08)}
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Noto Sans KR",sans-serif;color:var(--ink);background:var(--bg)}
+    button,input{font:inherit}
+    .app{max-width:1180px;margin:0 auto;padding:24px 16px 70px}
+    .hero,.card{background:var(--card);border:1px solid #e5e7eb;border-radius:22px;box-shadow:var(--shadow)}
+    .hero{padding:26px}
+    h1{margin:0;font-size:clamp(28px,5vw,46px);line-height:1.06;letter-spacing:-.04em}
+    .brand{display:block;color:var(--red);font-size:.56em;font-weight:900;margin-top:8px}
+    .sub{margin:12px 0 0;color:var(--muted)}
+    .warning{margin-top:18px;background:var(--warn);border:1px solid var(--warnLine);border-radius:16px;padding:14px 16px;line-height:1.65;font-size:14px}
+    .input-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end;margin-top:22px}
+    label{display:block;font-weight:900;font-size:14px;margin-bottom:8px}.hint{font-size:12px;color:var(--muted)}
+    .field{position:relative} input{width:100%;height:52px;border:1px solid #cbd5e1;border-radius:14px;padding:0 48px 0 14px;font-size:18px;font-weight:900;background:#fff}
+    input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.12)} .unit{position:absolute;right:14px;bottom:15px;color:var(--muted);font-weight:700}
+    .primary{height:52px;padding:0 24px;border:0;border-radius:14px;background:var(--red);color:#fff;font-weight:900;cursor:pointer;box-shadow:0 8px 20px rgba(229,57,53,.28)}
+    #result{display:none;margin-top:22px}.grid2{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.card{padding:20px}.card h2{margin:0 0 14px;font-size:22px;letter-spacing:-.03em}
+    .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.metric{background:#f8fafc;border:1px solid #e2e8f0;border-radius:14px;padding:13px}.metric .k{font-size:12px;color:var(--muted);font-weight:700}.metric .v{font-size:20px;font-weight:900;margin-top:2px}
+    .small{font-size:12px;color:var(--muted);line-height:1.6}.footwarn{margin-top:14px;border-left:4px solid var(--warnLine);background:var(--warn);padding:10px 12px;line-height:1.6;font-size:13px}
+    .table-wrap{overflow:auto} table{width:100%;min-width:860px;border-collapse:collapse} th,td{padding:11px 9px;border-bottom:1px solid #e5e7eb;text-align:center;white-space:nowrap} th{background:#f8fafc;font-size:13px} td:first-child,th:first-child{font-weight:900}
+    .row-red td:first-child{color:var(--red)} .row-white td:first-child{color:#475569} .row-belt{background:#f8fafc} .row-belt td:first-child{color:#111}
+    .actions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px}.action-btn{height:48px;border:1px solid #d1d5db;border-radius:14px;background:#fff;font-weight:900;cursor:pointer}.action-btn.active,.action-btn:hover{background:#111827;color:#fff;border-color:#111827}
+    .panel-section{display:none;margin-top:18px}.panel-section.active{display:block}.section-title{display:flex;justify-content:space-between;gap:12px;align-items:end;margin-bottom:12px}.section-title p{margin:0;color:var(--muted);font-size:13px}
+    .blueprint-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:16px}.preview-wrap{background:#f8fafc;border:1px solid #e2e8f0;border-radius:16px;padding:12px}.preview-wrap svg{width:100%;height:auto;display:block}
+    .legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:12px}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
+    .bp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.bp-card{border:1px solid #e5e7eb;border-radius:16px;padding:12px;background:#fff}.bp-card.armcard{border:2px solid #e11d48;background:#fff7f9}.bp-card.beltcard{border:2px solid #111;background:#fafafa}
+    .bp-title{display:flex;justify-content:space-between;align-items:center;font-weight:900;margin-bottom:6px}.badge{font-size:11px;border-radius:999px;padding:4px 8px;background:#f1f5f9}.badge.arm{background:#ffe4e6;color:#be123c}.badge.belt{background:#e5e7eb;color:#111}
+    .bp-card svg{width:100%;height:auto}.bp-meta{display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;font-size:12px;margin-top:8px}.bp-meta strong{font-size:13px}
+    .assembly-map{margin-top:14px;padding:14px;border:1px solid #fecdd3;background:#fff1f2;border-radius:14px}.assembly-map strong{color:#be123c}
+    .steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.step{border:1px solid #e5e7eb;border-radius:18px;background:#fff;overflow:hidden}.step-head{display:flex;gap:10px;align-items:center;padding:14px 14px 8px}.step-num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#111827;color:#fff;font-weight:900;flex:0 0 auto}.step h3{font-size:16px;margin:0}.step-art{padding:0 12px}.step-art svg{width:100%;height:210px;display:block}.step p{font-size:13px;line-height:1.65;color:#475569;padding:0 14px 14px;margin:0}
+    .wear{margin-top:16px;background:#eff6ff;border:1px solid #93c5fd;border-radius:16px;padding:16px}.wear b{color:#1d4ed8}
+    .supplies-table{min-width:560px}.supplies-table td:first-child{text-align:left}.supplies-table td:nth-child(2){color:var(--muted);text-align:left}.shop-banner{display:flex;align-items:center;justify-content:center;width:100%;min-height:62px;margin:0 0 16px;border-radius:16px;background:#111827;color:#fff;text-decoration:none;font-size:18px;font-weight:900;box-shadow:0 8px 20px rgba(0,0,0,.14)}.shop-banner:hover{filter:brightness(1.08)}.circle-list{margin-top:16px}.circle-list h3{margin:0 0 8px;font-size:17px}.circle-table{min-width:520px}.circle-table td:nth-child(2){font-weight:900}.method-note{margin:0 0 14px;padding:12px 14px;border-radius:14px;background:#eff6ff;border:1px solid #93c5fd;font-size:13px;line-height:1.65}
+    @media (max-width:860px){.input-grid,.grid2,.blueprint-layout,.steps,.bp-grid{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,1fr)}.actions{grid-template-columns:1fr}.primary{width:100%}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <section class="hero">
+    <h1>몬스터볼 옷만들기 <span class="brand">_sstt familly</span></h1>
+    <p class="sub">아이 키와 선택 입력한 머리둘레를 기준으로, 12열 × 6단 몬스터볼 코스튬 전개도와 제작방법을 계산합니다.</p>
+    <div class="warning"><b>⚠ 제작 전 확인하세요.</b><br>이 설계는 키를 기준으로 표준화한 치수입니다. 머리 크기, 어깨너비, 팔 위치 등 체형에 따라 정확히 맞지 않을 수 있습니다. 실제 착용자에 맞지 않는 부분은 직접 수정하세요. 머리둘레를 입력하면 상단 개구부를 더 맞춤형으로 계산합니다.</div>
+    <div class="input-grid">
+      <div><label for="height">아이 키 <span style="color:#dc2626">*</span></label><div class="field"><input id="height" type="number" min="80" max="220" value="120"><span class="unit">cm</span></div></div>
+      <div><label for="head">아이 머리둘레 <span class="hint">(선택)</span></label><div class="field"><input id="head" type="number" min="40" max="70" placeholder="예: 52"><span class="unit">cm</span></div></div>
+      <button class="primary" id="designBtn">설계하기</button>
+    </div>
+  </section>
+
+  <main id="result">
+    <div class="grid2">
+      <section class="card">
+        <h2>설계 결과</h2>
+        <div class="metrics" id="metrics"></div>
+        <div class="footwarn" id="headModeNote"></div>
+      </section>
+      <section class="card">
+        <h2>부속 치수</h2>
+        <div class="metrics" id="partsMetrics"></div>
+        <p class="small" style="margin-top:12px">팔구멍은 C패널 안에 원이 완전히 들어오도록, <b>min(C 전개도 높이, C 윗변, C 아랫변) - 15mm</b>를 최대값으로 제한합니다.</p>
+      </section>
+    </div>
+
+    <section class="card" style="margin-top:18px">
+      <h2>몬스터볼 제작 준비물</h2>
+      <div class="table-wrap">
+        <table class="supplies-table">
+          <thead><tr><th>준비물</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td><b>택배박스 OR 골판지</b></td><td>몬스터볼 본체 제작용</td></tr>
+            <tr><td><b>아크릴 물감 빨강</b></td><td>A~D 패널 도색용</td></tr>
+            <tr><td><b>아크릴 물감 하양</b></td><td>E~F 패널 및 원형 부품 도색용</td></tr>
+            <tr><td><b>검정 덕트 테이프</b></td><td>50mm 허리띠 마감용</td></tr>
+            <tr><td><b>테이프, 목공풀, 페인트 롤러</b></td><td>조립·접착·도색용</td></tr>
+            <tr><td><b>칼, 가위</b></td><td>골판지 및 테이프 재단용</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <a class="shop-banner" id="shopLink" href="#" target="_blank" rel="noopener" style="margin-top:16px">🛒 몬스터볼 제작 준비물 모음</a>
+    </section>
+
+    <section class="card" style="margin-top:18px">
+      <h2>제작 필요 리스트</h2>
+      <p class="small">단위 mm · 모든 재단 치수는 5mm 단위 · 높이는 <b>실제 전개도 높이</b>입니다.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>패널</th><th>윗변</th><th>아랫변</th><th>전개도 높이</th><th>윗변 1/2</th><th>아랫변 1/2</th><th>수량</th><th>비고</th></tr></thead>
+        <tbody id="panelTable"></tbody>
+      </table></div>
+      <div class="circle-list">
+        <h3>원형 부품</h3>
+        <div class="table-wrap"><table class="circle-table">
+          <thead><tr><th>부품</th><th>직경</th><th>수량</th><th>비고</th></tr></thead>
+          <tbody id="circleTable"></tbody>
+        </table></div>
+      </div>
+      <div class="actions">
+        <button class="action-btn active" data-target="blueprint">전개도 보기</button>
+        <button class="action-btn" data-target="method">제작방법</button>
+      </div>
+    </section>
+
+    <section id="blueprint" class="panel-section active card">
+      <div class="section-title"><div><h2 style="margin:0">전개도</h2><p>반투명 착용 미리보기 + A~F 패널 / 허리띠 재단도</p></div></div>
+      <div class="blueprint-layout">
+        <div class="preview-wrap">
+          <div id="wearPreview"></div>
+          <div class="legend">
+            <span><i class="dot" style="background:#e53935"></i>A~D 빨강</span>
+            <span><i class="dot" style="background:#fff;border:1px solid #94a3b8"></i>E~F 흰색</span>
+            <span><i class="dot" style="background:#111"></i>허리띠 50mm</span>
+          </div>
+        </div>
+        <div>
+          <div class="bp-grid" id="blueprintGrid"></div>
+          <div class="assembly-map"><strong>⚠ C열 조립 위치 주의</strong><br>정면 중앙 C패널을 기준으로 <b>왼쪽 2칸 / 오른쪽 2칸</b>에 C-ARM 패널을 배치하세요. 팔구멍은 각 C-ARM 패널의 중앙에 표시됩니다.<div id="cRingMap" style="margin-top:10px"></div></div>
+        </div>
+      </div>
+      <div class="footwarn">전개도는 표준화 설계입니다. 실제 재단 전 머리 통과 여부, 팔 위치, 하단 진입구 크기를 착용자 기준으로 반드시 확인하세요.</div>
+    </section>
+
+    <section id="method" class="panel-section card">
+      <div class="section-title"><div><h2 style="margin:0">제작방법</h2><p>정면·평면에서 본 2D 조립도로 단계별 안내</p></div></div>
+      <div class="steps" id="steps"></div>
+      <div class="wear"><b>착용 방법</b><br>몬스터볼을 들어 <b>하단 F열 구멍으로 몸을 넣고</b> → <b>상단 A열 구멍으로 머리를 뺀 뒤</b> → <b>C열 좌우 원형 구멍으로 손·손목을 뺍니다.</b></div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+(() => {
+  const CONFIG = {
+    BASE_PERSON_HEIGHT:1740,
+    BASE_COSTUME_HEIGHT:700,
+    BASE_ARM_HOLE:100,
+    PANEL_COUNT:12,
+    ROW_COUNT:6,
+    BELT_WIDTH:50,
+    BUTTON_BIG_AT_700:100,
+    BUTTON_SMALL_AT_700:50,
+    DEFAULT_TOP_OPENING:200,
+    HEAD_EASE_RATIO:1.1,
+    RING_DIAMETER_RATIOS:[null,.690,.911,.994,.994,.938,.662],
+    ARM_EDGE_MARGIN_TOTAL:15
+  };
+  const COUPANG_URL = "";
+  const $ = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+  const round5 = n => Math.round(n/5)*5;
+  const floor5 = n => Math.floor(n/5)*5;
+  const sin15 = Math.sin(Math.PI/12), cos15 = Math.cos(Math.PI/12);
+
+  function calc(heightCm, headCm){
+    const personH = heightCm*10;
+    const costumeH = round5(personH * CONFIG.BASE_COSTUME_HEIGHT / CONFIG.BASE_PERSON_HEIGHT);
+    const outerD = costumeH;
+    let topD, headMode;
+    if(headCm && headCm>0){
+      topD = round5((headCm*10*CONFIG.HEAD_EASE_RATIO)/Math.PI);
+      headMode = `머리둘레 ${headCm}cm 입력값 반영 → 상단 개구부 Ø${topD}mm`;
+    } else {
+      topD = CONFIG.DEFAULT_TOP_OPENING;
+      headMode = `머리둘레 미입력 → 상단 개구부는 표준 Ø${topD}mm로 계산`;
+    }
+    const ringD = [topD, outerD*CONFIG.RING_DIAMETER_RATIOS[1], outerD*CONFIG.RING_DIAMETER_RATIOS[2], outerD*CONFIG.RING_DIAMETER_RATIOS[3], outerD*CONFIG.RING_DIAMETER_RATIOS[4], outerD*CONFIG.RING_DIAMETER_RATIOS[5], outerD*CONFIG.RING_DIAMETER_RATIOS[6]];
+    const ringW = ringD.map(d=>round5(d*sin15));
+    const verticalBand = costumeH / CONFIG.ROW_COUNT;
+    const names = 'ABCDEF'.split('');
+    const rows = names.map((name,i)=>{
+      const a1=(ringD[i]/2)*cos15, a2=(ringD[i+1]/2)*cos15;
+      const flatH = round5(Math.sqrt(verticalBand*verticalBand + (a2-a1)*(a2-a1)));
+      return {name, top:ringW[i], bottom:ringW[i+1], flatH, topHalf:ringW[i]/2, bottomHalf:ringW[i+1]/2, qty:12, color:i<=3?'red':'white'};
+    });
+    const c = rows[2];
+    const armTarget = round5(personH * CONFIG.BASE_ARM_HOLE / CONFIG.BASE_PERSON_HEIGHT);
+    const armCap = Math.max(0, floor5(Math.min(c.flatH, c.top, c.bottom) - CONFIG.ARM_EDGE_MARGIN_TOTAL));
+    const armHole = Math.min(armTarget, armCap);
+    const bigButton = round5(costumeH * CONFIG.BUTTON_BIG_AT_700 / 700);
+    const smallButton = round5(costumeH * CONFIG.BUTTON_SMALL_AT_700 / 700);
+    const lowerOpeningD = round5(ringD[6]);
+    const belt = {name:'허리띠', top:rows[3].bottom, bottom:rows[3].bottom, flatH:CONFIG.BELT_WIDTH, topHalf:rows[3].bottom/2, bottomHalf:rows[3].bottom/2, qty:12, color:'belt'};
+    return {personH,costumeH,outerD,topD,lowerOpeningD,rows,belt,armHole,armCap,bigButton,smallButton,headMode};
+  }
+
+  function metric(k,v){return `<div class="metric"><div class="k">${k}</div><div class="v">${v}</div></div>`}
+  function fmtHalf(v){return Number.isInteger(v)?v:v.toFixed(1)}
+
+  function trapSvg(row, armHole, arm, pxPerMm){
+    const W=300,H=250,cx=W/2,y1=42;
+    const topW=row.top*pxPerMm, bottomW=row.bottom*pxPerMm, h=row.flatH*pxPerMm;
+    const y2=y1+h, x1=cx-topW/2,x2=cx+topW/2,x3=cx+bottomW/2,x4=cx-bottomW/2;
+    const holeR=arm?(armHole*pxPerMm/2):0, midY=(y1+y2)/2;
+    return `<svg viewBox="0 0 ${W} ${H}"><defs><marker id="a${row.name}${arm?'a':'n'}" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/></marker></defs>
+      <line x1="${cx}" y1="20" x2="${cx}" y2="${Math.min(H-18,y2+16)}" stroke="#94a3b8" stroke-dasharray="5 5"/>
+      <polygon points="${x1},${y1} ${x2},${y1} ${x3},${y2} ${x4},${y2}" fill="${row.color==='red'?'rgba(229,57,53,.16)':'rgba(255,255,255,.92)'}" stroke="${arm?'#e11d48':'#111827'}" stroke-width="${arm?3:2}"/>
+      ${arm?`<circle cx="${cx}" cy="${midY}" r="${holeR}" fill="rgba(225,29,72,.08)" stroke="#e11d48" stroke-width="3"/><text x="${cx}" y="${midY+5}" text-anchor="middle" font-size="13" font-weight="900" fill="#be123c">Ø${armHole}</text>`:''}
+      <line x1="${x1}" y1="${y1-14}" x2="${x2}" y2="${y1-14}" stroke="#64748b" marker-start="url(#a${row.name}${arm?'a':'n'})" marker-end="url(#a${row.name}${arm?'a':'n'})"/>
+      <text x="${cx}" y="${y1-18}" text-anchor="middle" font-size="12" fill="#334155">${row.top}mm</text>
+      <line x1="${x4}" y1="${y2+14}" x2="${x3}" y2="${y2+14}" stroke="#64748b" marker-start="url(#a${row.name}${arm?'a':'n'})" marker-end="url(#a${row.name}${arm?'a':'n'})"/>
+      <text x="${cx}" y="${y2+30}" text-anchor="middle" font-size="12" fill="#334155">${row.bottom}mm</text>
+      <line x1="${Math.max(x2,x3)+16}" y1="${y1}" x2="${Math.max(x2,x3)+16}" y2="${y2}" stroke="#64748b"/>
+      <text x="${Math.max(x2,x3)+22}" y="${midY}" font-size="11" fill="#334155" transform="rotate(90 ${Math.max(x2,x3)+22} ${midY})">${row.flatH}mm</text>
+      <text x="${cx-6}" y="${y1+15}" text-anchor="end" font-size="10" fill="#64748b">좌 ${fmtHalf(row.topHalf)}</text>
+      <text x="${cx-6}" y="${y2-8}" text-anchor="end" font-size="10" fill="#64748b">좌 ${fmtHalf(row.bottomHalf)}</text></svg>`;
+  }
+
+  function beltSvg(b){
+    return `<svg viewBox="0 0 300 180"><rect x="32" y="66" width="236" height="48" rx="2" fill="rgba(17,17,17,.08)" stroke="#111827" stroke-width="2"/>
+    <line x1="32" y1="54" x2="268" y2="54" stroke="#64748b"/><text x="150" y="48" text-anchor="middle" font-size="12" fill="#334155">${b.top}mm</text>
+    <line x1="278" y1="66" x2="278" y2="114" stroke="#64748b"/><text x="286" y="95" font-size="12" fill="#334155">50mm</text>
+    <text x="150" y="146" text-anchor="middle" font-size="12" fill="#475569">D열 하단에 붙이는 직사각형 허리띠</text></svg>`;
+  }
+
+  function circlesSvg(d, pxPerMm){
+    const W=300,H=250,cx1=92,cx2=220,cy=118;
+    const r1=d.bigButton*pxPerMm/2, r2=d.smallButton*pxPerMm/2;
+    return `<svg viewBox="0 0 ${W} ${H}">
+      <circle cx="${cx1}" cy="${cy}" r="${r1}" fill="#fff" stroke="#111827" stroke-width="2"/>
+      <circle cx="${cx2}" cy="${cy}" r="${r2}" fill="#fff" stroke="#111827" stroke-width="2"/>
+      <text x="${cx1}" y="${cy+5}" text-anchor="middle" font-size="12" font-weight="900">Ø${d.bigButton}</text>
+      <text x="${cx2}" y="${cy+5}" text-anchor="middle" font-size="12" font-weight="900">Ø${d.smallButton}</text>
+      <text x="${cx1}" y="${cy+r1+24}" text-anchor="middle" font-size="11" fill="#475569">큰 원</text>
+      <text x="${cx2}" y="${cy+r2+24}" text-anchor="middle" font-size="11" fill="#475569">작은 원</text>
+    </svg>`;
+  }
+
+  function previewSvg(d){
+    const W=420,H=620,scale=500/d.personH,cx=210,topP=55,bodyPx=d.personH*scale,shoulderY=topP+95,cTop=shoulderY-6,rowV=d.costumeH*scale/6;
+    const ringPx=[d.topD,d.outerD*.690,d.outerD*.911,d.outerD*.994,d.outerD*.994,d.outerD*.938,d.lowerOpeningD].map(v=>v*scale/2);
+    const y=Array.from({length:7},(_,i)=>cTop+i*rowV), band=(i)=>`M ${cx-ringPx[i]} ${y[i]} L ${cx+ringPx[i]} ${y[i]} L ${cx+ringPx[i+1]} ${y[i+1]} L ${cx-ringPx[i+1]} ${y[i+1]} Z`;
+    const beltH=CONFIG.BELT_WIDTH*scale, beltY=y[4]-beltH, handY=(y[2]+y[3])/2;
+    const labels='ABCDEF'.split('').map((r,i)=>{const yy=(y[i]+y[i+1])/2; return `<text x="36" y="${yy+4}" font-size="14" font-weight="900">${r}</text><line x1="54" y1="${yy}" x2="${cx-ringPx[i]*.95}" y2="${yy}" stroke="#64748b" stroke-dasharray="3 3"/>`}).join('');
+    return `<svg viewBox="0 0 ${W} ${H}"><rect width="${W}" height="${H}" rx="16" fill="#f8fafc"/>
+    <g opacity=".26" fill="#334155"><circle cx="${cx}" cy="${topP+35}" r="30"/><rect x="${cx-38}" y="${topP+68}" width="76" height="160" rx="34"/><rect x="${cx-72}" y="${topP+88}" width="34" height="165" rx="17"/><rect x="${cx+38}" y="${topP+88}" width="34" height="165" rx="17"/><rect x="${cx-34}" y="${topP+215}" width="30" height="235" rx="15"/><rect x="${cx+4}" y="${topP+215}" width="30" height="235" rx="15"/></g>
+    <line x1="392" y1="${topP}" x2="392" y2="${topP+bodyPx}" stroke="#475569"/><line x1="384" y1="${topP}" x2="400" y2="${topP}" stroke="#475569"/><line x1="384" y1="${topP+bodyPx}" x2="400" y2="${topP+bodyPx}" stroke="#475569"/><text x="380" y="${topP+bodyPx/2}" text-anchor="end" font-size="12" fill="#475569">${Math.round(d.personH/10)}cm</text>
+    ${[0,1,2,3,4,5].map(i=>`<path d="${band(i)}" fill="${i<=3?'rgba(229,57,53,.5)':'rgba(255,255,255,.86)'}" stroke="#111827" stroke-width="1.5"/>`).join('')}${labels}
+    <rect x="${cx-ringPx[4]}" y="${beltY}" width="${ringPx[4]*2}" height="${beltH}" fill="rgba(17,17,17,.92)"/><text x="${cx+ringPx[4]+12}" y="${beltY+beltH/2+4}" font-size="11" fill="#111">허리띠</text>
+    <circle cx="${cx}" cy="${beltY+beltH/2}" r="${d.bigButton*scale/2}" fill="#fff" stroke="#111" stroke-width="2"/><circle cx="${cx}" cy="${beltY+beltH/2}" r="${d.smallButton*scale/2}" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+    <circle cx="${cx-ringPx[2]*.92}" cy="${handY}" r="${d.armHole*scale/2}" fill="none" stroke="#be123c" stroke-width="3"/><circle cx="${cx+ringPx[2]*.92}" cy="${handY}" r="${d.armHole*scale/2}" fill="none" stroke="#be123c" stroke-width="3"/><text x="${cx}" y="${handY-8}" text-anchor="middle" font-size="11" font-weight="900" fill="#be123c">C-ARM Ø${d.armHole}mm</text>
+    <text x="${cx}" y="${y[0]-12}" text-anchor="middle" font-size="12" font-weight="800" fill="#475569">A 상단 개구부 Ø${d.topD}mm</text><text x="${cx}" y="${y[6]+28}" text-anchor="middle" font-size="12" font-weight="800" fill="#475569">F 하단 개구부 약 Ø${d.lowerOpeningD}mm</text>
+    <line x1="${cx-ringPx[3]}" y1="${y[3]+18}" x2="${cx+ringPx[3]}" y2="${y[3]+18}" stroke="#2563eb"/><text x="${cx}" y="${y[3]+34}" text-anchor="middle" font-size="12" font-weight="900" fill="#1d4ed8">최대폭 약 ${d.outerD}mm</text></svg>`;
+  }
+
+  function cMap(d){
+    const W=360,H=220,cx=180,cy=110,R=78; let s=`<svg viewBox="0 0 ${W} ${H}" style="width:100%;max-width:420px">`;
+    for(let i=0;i<12;i++){const a=(-90+i*30)*Math.PI/180,x=cx+R*Math.cos(a),y=cy+R*Math.sin(a),arm=(i===2||i===10); s+=`<circle cx="${x}" cy="${y}" r="15" fill="${arm?'#e11d48':'#fff'}" stroke="${arm?'#be123c':'#94a3b8'}" stroke-width="2"/><text x="${x}" y="${y+4}" text-anchor="middle" font-size="10" font-weight="900" fill="${arm?'#fff':'#334155'}">${arm?'ARM':i}</text>`}
+    s+=`<text x="${cx}" y="${cy-7}" text-anchor="middle" font-size="13" font-weight="900">정면 중앙 = 0</text><text x="${cx}" y="${cy+13}" text-anchor="middle" font-size="11" fill="#64748b">±2칸에 팔구멍 패널</text><text x="${cx}" y="${H-12}" text-anchor="middle" font-size="11" font-weight="800" fill="#be123c">C-ARM 2개 · 구멍 Ø${d.armHole}mm</text></svg>`;
+    return s;
+  }
+
+  function stepSvg(i,d){
+    const stroke='stroke="#111827" stroke-width="2.2" fill="none" stroke-linejoin="round" stroke-linecap="round"';
+    const ringPanel=(cx,cy,innerR,outerR,a0,a1,fill='rgba(229,57,53,.08)',st='#111827')=>{
+      const p=(r,a)=>[cx+r*Math.cos(a),cy+r*Math.sin(a)];
+      const i0=p(innerR,a0), i1=p(innerR,a1), o1=p(outerR,a1), o0=p(outerR,a0);
+      return `<polygon points="${i0[0]},${i0[1]} ${i1[0]},${i1[1]} ${o1[0]},${o1[1]}" fill="${fill}" stroke="${st}" stroke-width="2"/>`;
+    };
+
+    // 실제 A~F 폭 비율을 사용한 정면 다각형. 6/9/10번이 같은 외형을 공유한다.
+    const sphereFront=(opts={belt:false,button:false})=>{
+      const rows=d.rows, maxW=Math.max(...rows.flatMap(r=>[r.top,r.bottom]));
+      const cx=200, maxPx=250, sc=maxPx/maxW;
+      const heights=[28,31,32,32,31,28];
+      let y=18, shapes='', labels='';
+      const bounds=[y];
+      rows.forEach((r,idx)=>{
+        const topW=r.top*sc, botW=r.bottom*sc, h=heights[idx], y2=y+h;
+        const fill=idx<=3 ? 'rgba(229,57,53,.12)' : 'rgba(255,255,255,.96)';
+        shapes += `<polygon points="${cx-topW/2},${y} ${cx+topW/2},${y} ${cx+botW/2},${y2} ${cx-botW/2},${y2}" fill="${fill}" stroke="#111827" stroke-width="2"/>`;
+        labels += `<text x="${cx-botW/2-18}" y="${(y+y2)/2+4}" font-size="11" font-weight="900">${r.name}</text>`;
+        y=y2; bounds.push(y);
+      });
+      const dTopY=bounds[3];
+      const dBottomY=bounds[4]; // D열 하단 경계
+      const dRowH=dBottomY-dTopY;
+      const beltH=Math.max(10, dRowH/2); // 검정띠는 D열의 절반 높이만 색칠
+      let extra='';
+      if(opts.belt){
+        const w=d.rows[3].bottom*sc;
+        // 검정띠는 D 하단 절반만 색칠: 띠 전체가 D 안쪽에 있고 아래끝이 D 하단과 일치
+        extra += `<rect x="${cx-w/2}" y="${dBottomY-beltH}" width="${w}" height="${beltH}" fill="#111" stroke="#111"/>`;
+      }
+      if(opts.button){
+        const cy=dBottomY-beltH/2;
+        // 10번 그림 전용 규칙: 작은 원 지름 = 검정띠 폭, 큰 원 지름 = 작은 원의 2배
+        const smallR=beltH/2;
+        const bigR=smallR*2;
+        extra += `<circle cx="${cx}" cy="${cy}" r="${bigR}" fill="#fff" stroke="#111827" stroke-width="2"/><circle cx="${cx}" cy="${cy}" r="${smallR}" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>`;
+      }
+      return {svg:`${shapes}${extra}${labels}`, bottom:y, dBottomY, beltH};
+    };
+
+    if(i===1){
+      let polys=''; const cx=200,cy=98,ir=53,or=110;
+      for(let k=0;k<12;k++){
+        const a0=(-105+k*30)*Math.PI/180,a1=(-75+k*30)*Math.PI/180;
+        const p=(r,a)=>[cx+r*Math.cos(a),cy+r*Math.sin(a)];
+        const i0=p(ir,a0),i1=p(ir,a1),o1=p(or,a1),o0=p(or,a0);
+        polys+=`<polygon points="${i0[0]},${i0[1]} ${i1[0]},${i1[1]} ${o1[0]},${o1[1]} ${o0[0]},${o0[1]}" fill="${k%2?'rgba(229,57,53,.05)':'rgba(229,57,53,.13)'}" stroke="#111827" stroke-width="2"/>`;
+      }
+      return `<svg viewBox="0 0 400 220">${polys}<circle cx="${cx}" cy="${cy}" r="${ir}" fill="#fff" stroke="#64748b" stroke-dasharray="4 4"/>
+        <text x="200" y="98" text-anchor="middle" font-size="12" font-weight="900">작은 변 = 내경</text><text x="200" y="22" text-anchor="middle" font-size="12" font-weight="900">긴 변 = 외경</text>
+        <text x="200" y="196" text-anchor="middle" font-size="12" fill="#475569">모든 패널을 같은 방향으로 두고 빗변끼리 테이프로 고정</text><text x="200" y="214" text-anchor="middle" font-size="11" fill="#be123c">조립할 때는 번갈아 뒤집지 않습니다.</text></svg>`;
+    }
+    if(i===2){
+      let polys=''; const cx=200,cy=104,ir=54,or=112;
+      for(let k=0;k<12;k++){
+        const a0=(-105+k*30)*Math.PI/180,a1=(-75+k*30)*Math.PI/180;
+        const p=(r,a)=>[cx+r*Math.cos(a),cy+r*Math.sin(a)];
+        const i0=p(ir,a0),i1=p(ir,a1),o1=p(or,a1),o0=p(or,a0);
+        const arm=(k===2||k===10), center=(k===0);
+        polys+=`<polygon points="${i0[0]},${i0[1]} ${i1[0]},${i1[1]} ${o1[0]},${o1[1]} ${o0[0]},${o0[1]}" fill="${arm?'rgba(225,29,72,.22)':center?'rgba(37,99,235,.14)':'rgba(229,57,53,.06)'}" stroke="${arm?'#be123c':center?'#2563eb':'#94a3b8'}" stroke-width="2"/>`;
+      }
+      return `<svg viewBox="0 0 400 220">${polys}<text x="200" y="24" text-anchor="middle" font-size="13" font-weight="900">C열 평면 조립도</text><text x="200" y="103" text-anchor="middle" font-size="11" font-weight="900" fill="#2563eb">정면 중앙</text><text x="200" y="202" text-anchor="middle" font-size="11" fill="#be123c">중앙에서 왼쪽 2칸 / 오른쪽 2칸 = C-ARM</text></svg>`;
+    }
+    if(i===3){
+      return `<svg viewBox="0 0 400 220"><text x="88" y="28" font-size="12" font-weight="900">정면도</text><rect x="58" y="58" width="170" height="112" fill="rgba(229,57,53,.07)" stroke="#111827" stroke-width="2"/>${[1,2,3,4,5].map(k=>`<line x1="${58+k*170/6}" y1="58" x2="${58+k*170/6}" y2="170" stroke="#94a3b8"/>`).join('')}<text x="143" y="190" text-anchor="middle" font-size="11" fill="#475569">D 패널 높이가 세로 방향</text><text x="300" y="28" font-size="12" font-weight="900">위에서 본 모습</text><polygon points="300,54 344,72 362,116 344,160 300,178 256,160 238,116 256,72" fill="none" stroke="#111827" stroke-width="2"/><polygon points="300,78 327,89 338,116 327,143 300,154 273,143 262,116 273,89" fill="#fff" stroke="#94a3b8" stroke-width="1.5"/><text x="300" y="205" text-anchor="middle" font-size="12" font-weight="900">D열 = 세워진 12각 링</text></svg>`;
+    }
+    if(i===4){
+      const D=d.rows[3],E=d.rows[4], max=Math.max(D.top,D.bottom,E.top,E.bottom), sc=245/max,cx=200;
+      const dW=D.top*sc,eBot=E.top*sc,eTop=E.bottom*sc;
+      return `<svg viewBox="0 0 400 220"><rect x="${cx-dW/2}" y="142" width="${dW}" height="42" fill="rgba(229,57,53,.08)" stroke="#111827" stroke-width="2"/><polygon points="${cx-eTop/2},92 ${cx+eTop/2},92 ${cx+eBot/2},142 ${cx-eBot/2},142" fill="#fff" stroke="#111827" stroke-width="2"/><text x="200" y="166" text-anchor="middle" font-size="13" font-weight="900">D</text><text x="200" y="120" text-anchor="middle" font-size="13" font-weight="900">E</text><text x="200" y="28" text-anchor="middle" font-size="13" font-weight="900">D 위에 E를 1칸씩 → 총 12칸</text><text x="200" y="211" text-anchor="middle" font-size="11" fill="#475569">한 칸 고정 → 옆 칸 이동 → 12칸 전체 완성</text></svg>`;
+    }
+    if(i===5){
+      // D→E→F 실제 폭비를 사용해 구형 하반구처럼 완만하게 좁아지게 표시
+      const D=d.rows[3],E=d.rows[4],F=d.rows[5], max=Math.max(D.top,D.bottom,E.top,E.bottom,F.top,F.bottom), sc=245/max,cx=200;
+      const dW=D.top*sc, eWide=E.top*sc, eNarrow=E.bottom*sc, fWide=F.top*sc, fNarrow=F.bottom*sc;
+      return `<svg viewBox="0 0 400 220"><rect x="${cx-dW/2}" y="150" width="${dW}" height="38" fill="rgba(229,57,53,.08)" stroke="#111827" stroke-width="2"/><polygon points="${cx-eNarrow/2},108 ${cx+eNarrow/2},108 ${cx+eWide/2},150 ${cx-eWide/2},150" fill="#fff" stroke="#111827" stroke-width="2"/><polygon points="${cx-fNarrow/2},68 ${cx+fNarrow/2},68 ${cx+fWide/2},108 ${cx-fWide/2},108" fill="#fff" stroke="#111827" stroke-width="2"/><text x="200" y="172" text-anchor="middle" font-size="13" font-weight="900">D</text><text x="200" y="132" text-anchor="middle" font-size="13" font-weight="900">E</text><text x="200" y="92" text-anchor="middle" font-size="13" font-weight="900">F</text><text x="200" y="28" text-anchor="middle" font-size="13" font-weight="900">E 위에 F도 1칸씩 → 총 12칸</text><text x="200" y="211" text-anchor="middle" font-size="11" fill="#475569">실제 패널 폭 비율대로 완만하게 좁아지는 하반구</text></svg>`;
+    }
+    if(i===6){
+      const g=sphereFront();
+      return `<svg viewBox="0 0 400 240">${g.svg}<text x="200" y="224" text-anchor="middle" font-size="11" fill="#475569">완성 외형이 구형에 가깝도록 A~F 실제 폭 비율로 표시</text></svg>`;
+    }
+    if(i===7){
+      const bigR=54, smallR=28;
+      return `<svg viewBox="0 0 400 220"><circle cx="200" cy="105" r="${bigR}" fill="#fff" stroke="#111827" stroke-width="2.4"/><circle cx="200" cy="105" r="${smallR}" fill="#f8fafc" stroke="#111827" stroke-width="2.2"/></svg>`;
+    }
+    if(i===8){
+      return `<svg viewBox="0 0 400 220"><rect x="65" y="82" width="270" height="50" fill="#fff" stroke="#111827" stroke-width="2"/><rect x="65" y="82" width="270" height="50" fill="rgba(17,17,17,.88)"/><line x1="350" y1="82" x2="350" y2="132" stroke="#2563eb" stroke-width="2"/><text x="358" y="111" font-size="12" font-weight="900" fill="#2563eb">50mm</text><text x="200" y="62" text-anchor="middle" font-size="13" font-weight="900">허리띠 골판지 전체에 50mm 덕트테이프</text><text x="200" y="188" text-anchor="middle" font-size="11" fill="#475569">골판지 높이와 테이프 폭을 같게 해서 한 번에 마감</text></svg>`;
+    }
+    if(i===9){
+      const g=sphereFront({belt:true});
+      return `<svg viewBox="0 0 400 240">${g.svg}<text x="200" y="224" text-anchor="middle" font-size="12" font-weight="900">D열 하단부에 50mm 검정 허리띠 부착</text></svg>`;
+    }
+    const g=sphereFront({belt:true,button:true});
+    return `<svg viewBox="0 0 400 240">${g.svg}<text x="200" y="224" text-anchor="middle" font-size="12" font-weight="900">9번 완성 형태의 검정띠 중앙에 동심원 버튼 부착</text></svg>`;
+  }
+
+  function render(d){
+    $('#result').style.display='block';
+    $('#metrics').innerHTML = metric('착용자 키',`${Math.round(d.personH/10)}cm`) + metric('몬스터볼 높이',`${d.costumeH}mm`) + metric('최대 폭',`약 ${d.outerD}mm`) + metric('상단 A 개구부',`Ø${d.topD}mm`) + metric('하단 F 개구부',`Ø${d.lowerOpeningD}mm`) + metric('패널 수',`72개 + 허리띠 12개`);
+    $('#partsMetrics').innerHTML = metric('팔구멍',`Ø${d.armHole}mm`) + metric('큰 원',`Ø${d.bigButton}mm`) + metric('작은 원',`Ø${d.smallButton}mm`) + metric('허리띠 폭',`${CONFIG.BELT_WIDTH}mm`) + metric('허리띠 1칸',`${d.belt.top}×50`) + metric('허리띠 수량',`12개`);
+    $('#headModeNote').innerHTML = `<b>상단 구멍 계산:</b> ${d.headMode}`;
+
+    const notes={A:'상단 개구부 시작',B:'일반 패널',C:'C-ARM 2개 포함 · 중앙 기준 ±2칸',D:'직사각형 중심열',belt:'D열 하단 허리띠 · 높이 50mm',E:'하부 흰색',F:'하부 진입구 형성'};
+    const allRows=[d.rows[0],d.rows[1],d.rows[2],d.rows[3],d.belt,d.rows[4],d.rows[5]];
+    $('#panelTable').innerHTML = allRows.map(r=>`<tr class="${r.color==='red'?'row-red':r.color==='white'?'row-white':'row-belt'}"><td>${r.name}</td><td>${r.top}</td><td>${r.bottom}</td><td><b>${r.flatH}</b></td><td>${fmtHalf(r.topHalf)}</td><td>${fmtHalf(r.bottomHalf)}</td><td>${r.qty}</td><td>${notes[r.name==='허리띠'?'belt':r.name]}</td></tr>`).join('');
+    $('#circleTable').innerHTML = `<tr><td><b>큰 원</b></td><td>Ø${d.bigButton}mm</td><td>1개</td><td>허리띠 정면 중앙에 붙이는 바깥 원</td></tr><tr><td><b>작은 원</b></td><td>Ø${d.smallButton}mm</td><td>1개</td><td>큰 원 중심에 동심으로 붙이는 안쪽 원</td></tr>`;
+
+    $('#wearPreview').innerHTML = previewSvg(d);
+    const globalMax = Math.max(...d.rows.flatMap(r=>[r.top,r.bottom,r.flatH]), d.bigButton);
+    const pxPerMm = Math.min(1.15, 205/globalMax);
+    const cards=[];
+    d.rows.forEach(r=>{
+      if(r.name==='C'){
+        cards.push(`<div class="bp-card"><div class="bp-title"><span>C 일반</span><span class="badge">10개</span></div>${trapSvg(r,d.armHole,false,pxPerMm)}<div class="bp-meta"><span>윗변 <strong>${r.top}mm</strong></span><span>윗변 좌 <strong>${fmtHalf(r.topHalf)}mm</strong></span><span>아랫변 <strong>${r.bottom}mm</strong></span><span>아랫변 좌 <strong>${fmtHalf(r.bottomHalf)}mm</strong></span><span>전개도 높이 <strong>${r.flatH}mm</strong></span></div></div>`);
+        cards.push(`<div class="bp-card armcard"><div class="bp-title"><span>C-ARM</span><span class="badge arm">2개 · ±2칸</span></div>${trapSvg(r,d.armHole,true,pxPerMm)}<div class="bp-meta"><span>팔구멍 <strong>Ø${d.armHole}mm</strong></span><span>허용 최대 <strong>Ø${d.armCap}mm</strong></span><span>윗변 <strong>${r.top}mm</strong></span><span>아랫변 <strong>${r.bottom}mm</strong></span><span>전개도 높이 <strong>${r.flatH}mm</strong></span></div></div>`);
+      } else {
+        cards.push(`<div class="bp-card"><div class="bp-title"><span>${r.name}</span><span class="badge">12개</span></div>${trapSvg(r,d.armHole,false,pxPerMm)}<div class="bp-meta"><span>윗변 <strong>${r.top}mm</strong></span><span>윗변 좌 <strong>${fmtHalf(r.topHalf)}mm</strong></span><span>아랫변 <strong>${r.bottom}mm</strong></span><span>아랫변 좌 <strong>${fmtHalf(r.bottomHalf)}mm</strong></span><span>전개도 높이 <strong>${r.flatH}mm</strong></span></div></div>`);
+      }
+    });
+    cards.splice(4,0,`<div class="bp-card beltcard"><div class="bp-title"><span>허리띠</span><span class="badge belt">12개 · D 하단</span></div>${beltSvg(d.belt)}<div class="bp-meta"><span>가로 <strong>${d.belt.top}mm</strong></span><span>세로 <strong>50mm</strong></span><span>윗변=아랫변 <strong>${d.belt.top}mm</strong></span><span>기준 <strong>D 패널 폭과 동일</strong></span></div></div>`);
+    cards.push(`<div class="bp-card"><div class="bp-title"><span>원형 부품</span><span class="badge">각 1개</span></div>${circlesSvg(d,pxPerMm)}<div class="bp-meta"><span>큰 원 <strong>Ø${d.bigButton}mm</strong></span><span>작은 원 <strong>Ø${d.smallButton}mm</strong></span></div></div>`);
+    $('#blueprintGrid').innerHTML = cards.join('');
+    $('#cRingMap').innerHTML = cMap(d);
+
+    const steps=[
+      ['1. 같은 라인 패널끼리 링 만들기','조립할 때는 사다리꼴을 번갈아 뒤집지 않습니다. 작은 변은 내경, 긴 변은 외경이 되도록 모든 패널을 같은 방향으로 놓고 빗변끼리 테이프로 고정합니다. 재단할 때만 재료 절약을 위해 뒤집어 맞물려 배치할 수 있습니다.'],
+      ['1.1 C열 팔구멍 위치 확인','C열을 링으로 만들 때 정면 중앙 패널을 먼저 정하고, 그 기준에서 왼쪽 2칸과 오른쪽 2칸에 C-ARM 패널을 배치합니다.'],
+      ['2. D열 세우기','D는 직사각형 패널이라 12개를 연결하면 높이 방향으로 세워진 12각 원통 링이 됩니다. 이 D링이 전체 조립의 기준입니다.'],
+      ['3. E열 쌓기','D 위에 E패널을 한 칸씩 올려 붙입니다. 한 칸을 테이프로 고정하고 옆 칸으로 이동하는 방식으로 12칸 전체를 완성합니다.'],
+      ['3-2. F열 쌓기','E 위에 F패널을 같은 방식으로 한 칸씩 12칸 모두 붙입니다.'],
+      ['4. 뒤집어서 C-B-A 쌓기','D-E-F 조립체를 뒤집으면 아래에서부터 F → E → D 순서가 됩니다. 그 위에 C → B → A를 한 칸씩 같은 방식으로 붙입니다.'],
+      ['5. 원 두 개 동심으로 붙이기','큰 원과 작은 원을 정확히 동심으로 붙입니다. 목공풀이 있으면 편합니다.'],
+      ['5-1. 허리띠에 덕트테이프 붙이기','높이 50mm 허리띠 골판지에 폭 50mm 덕트테이프를 붙여 한 번에 검정 띠를 만듭니다.'],
+      ['6. 허리띠를 몬스터볼에 붙이기','완성된 몬스터볼의 D열 하단 둘레에 검정 허리띠를 붙입니다. 검정띠의 아래쪽 끝이 D열 하단선과 맞도록 정렬합니다.'],
+      ['7. 중앙 버튼 붙이기','5단계에서 만든 동심원 버튼을 허리띠 정면 중앙에 붙이면 완성입니다.']
+    ];
+    $('#steps').innerHTML = `<div class="method-note"><b>그림 읽는 법</b><br>이 제작방법은 입체 투시도 대신 <b>위에서 본 평면도 / 정면에서 본 단면도</b>를 사용합니다. 실제 조립할 때 어느 변을 맞대야 하는지에 집중해서 보세요.</div>` + steps.map((st,idx)=>`<article class="step"><div class="step-head"><span class="step-num">${idx+1}</span><h3>${st[0]}</h3></div><div class="step-art">${stepSvg(idx+1,d)}</div><p>${st[1]}</p></article>`).join('');
+    window.scrollTo({top:$('#result').offsetTop-16,behavior:'smooth'});
+  }
+
+  $('#designBtn').addEventListener('click',()=>{
+    const h=parseFloat($('#height').value), head=parseFloat($('#head').value);
+    if(!h || h<80 || h>220){alert('아이 키를 80~220cm 범위로 입력해주세요.'); return;}
+    if(head && (head<40 || head>70)){alert('머리둘레는 40~70cm 범위로 입력해주세요.'); return;}
+    render(calc(h,head));
+  });
+  $$('.action-btn').forEach(btn=>btn.addEventListener('click',()=>{$$('.action-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); $$('.panel-section').forEach(s=>s.classList.remove('active')); $('#'+btn.dataset.target).classList.add('active');}));
+  $('#shopLink').addEventListener('click',e=>{ if(!COUPANG_URL){e.preventDefault(); alert('아직 준비물 링크가 입력되지 않았습니다. 코드의 COUPANG_URL 값을 형님의 쿠팡 인플루언서 링크로 바꿔주세요.');} else { $('#shopLink').href=COUPANG_URL; }});
+  render(calc(parseFloat($('#height').value), null));
+})();
+</script>
+</body>
+</html>
